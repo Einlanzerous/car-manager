@@ -31,7 +31,11 @@ export class UsersService {
     return this.repo.save(user);
   }
 
-  remote() {
+  async remote(id: number) {
+    const user = await this.findOne(id);
 
+    if (!user) throw new Error('User not found');
+
+    return this.repo.remove(user);
   }
 }
