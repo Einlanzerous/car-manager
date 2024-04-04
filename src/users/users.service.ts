@@ -13,7 +13,7 @@ export class UsersService {
     return this.repo.save(user);
   }
 
-  fineOne(id: number) {
+  findOne(id: number) {
     return this.repo.findOneBy({ id });
   }
 
@@ -21,11 +21,17 @@ export class UsersService {
     return this.repo.find({ where: { email } });
   }
 
-  update() {
+  async update(id: number, attrs: Partial<User>) {
+    const user = await this.findOne(id);
 
+    if (!user) throw new Error('User not found');
+
+    Object.assign(user, attrs);
+
+    return this.repo.save(user);
   }
 
   remote() {
-    
+
   }
 }
