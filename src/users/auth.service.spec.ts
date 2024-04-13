@@ -15,14 +15,18 @@ describe('AuthService', () => {
 
     fakeUsersService = {
       find: (email: string) => {
-        const filteredUsers = users.filter(user => user.email === email);
+        const filteredUsers = users.filter((user) => user.email === email);
         return Promise.resolve(filteredUsers);
       },
       create: (email: string, password: string) => {
-        const user: User = { id: Math.floor(Math.random() * 99999), email, password };
+        const user: User = {
+          id: Math.floor(Math.random() * 99999),
+          email,
+          password,
+        };
         users.push(user);
         return Promise.resolve(user);
-      }
+      },
     };
     const module = await Test.createTestingModule({
       providers: [
@@ -54,9 +58,9 @@ describe('AuthService', () => {
   test('Throws an error if user signs up with an e-mail that is in use', async () => {
     await service.signup(email, password);
 
-    await expect(
-      service.signup(email, password),
-    ).rejects.toThrow(BadRequestException);
+    await expect(service.signup(email, password)).rejects.toThrow(
+      BadRequestException,
+    );
   });
 
   test('Throws an error if user attempts to sign in with an unused email', async () => {
@@ -73,7 +77,7 @@ describe('AuthService', () => {
   });
 
   test('Returns correct user if correct password is provided', async () => {
-    const createdUser = await service.signup(email, password)
+    const createdUser = await service.signup(email, password);
     const user = await service.signin(email, password);
 
     expect(user).toBeDefined();
